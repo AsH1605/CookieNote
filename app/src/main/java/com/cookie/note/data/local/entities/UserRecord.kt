@@ -1,15 +1,15 @@
 package com.cookie.note.data.local.entities
 
 import androidx.room.Entity
-import java.util.Date
+import androidx.room.PrimaryKey
 
 @Entity
 data class UserRecord(
-    val id: Int,
+    @PrimaryKey val id: Int,
     val username: String,
     val email: String,
     val password: String,
-    val createdAt: Date,
-    val lastUpdatedAt: Date,
+    val createdAt: Long,
+    val lastUpdatedAt: Long,
     val idToken: String
 )

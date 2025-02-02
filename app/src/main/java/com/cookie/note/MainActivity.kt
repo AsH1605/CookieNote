@@ -11,7 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.cookie.note.domain.models.Note
+import com.cookie.note.presentation.screens.list.AllNotesScreen
+import com.cookie.note.presentation.screens.list.model.UiState
 import com.cookie.note.presentation.theme.CookieNoteTheme
+import java.util.Date
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,12 +23,122 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CookieNoteTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                AllNotesScreen(
+                    uiState = UiState(
+                        username = "apple",
+                        allNotes = listOf(
+                            Note(
+                                title = "hello",
+                                content = "bye bye",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye bye bye bye bye bye bye bey bye bye bye bye bye bye bye bye beybye bye bye bye bye bye bye bye bey ",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye bye bye bye bye bye bye bey bye bye bye bye bye bye bye bye beybye bye bye bye bye bye bye bye bey ",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye bye bye bye bye bye bye bey bye bye bye bye bye bye bye bye beybye bye bye bye bye bye bye bye bey ",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye bye bye bye bye bye bye bey bye bye bye bye bye bye bye bye beybye bye bye bye bye bye bye bye bey ",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye bye bye bye bye bye bye bey bye bye bye bye bye bye bye bye beybye bye bye bye bye bye bye bye bey ",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye bye bye bye bye bye bye bey bye bye bye bye bye bye bye bye beybye bye bye bye bye bye bye bye bey ",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                            Note(
+                                title = "hello",
+                                content = "bye bye",
+                                lastUpdatedAt = Date(),
+                                localId = 1
+                            ),
+                        )
+                    ),
+                    onUiEvent = {}
+                )
             }
         }
     }
