@@ -7,14 +7,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
@@ -38,10 +42,14 @@ import com.cookie.note.presentation.screens.list.model.UiState
 import java.util.Date
 
 @Composable
-fun AllNotesScreen(viewModel: ListNoteVM){
+fun AllNotesScreen(viewModel: ListNoteVM, navigateToNoteEditor: () -> Unit){
     val uiState by viewModel.uiState.collectAsState()
     uiState?.let { state->
-        AllNotesScreen(uiState = state, onUiEvent = {})
+        AllNotesScreen(uiState = state, onUiEvent = {event->
+            when(event){
+                UiEvent.OnCreateNoteClicked -> navigateToNoteEditor()
+            }
+        })
     }
 }
 
@@ -71,7 +79,16 @@ private fun AllNotesScreen(uiState: UiState, onUiEvent: (UiEvent)->Unit){
                 },
                 scrollBehavior = scrollBehavior
             )
-        }
+        },
+        floatingActionButton = { FloatingActionButton(
+            onClick = {onUiEvent(UiEvent.OnCreateNoteClicked)}
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add note",
+                modifier = Modifier.size(23.dp)
+            )
+        } }
     ) {padding->
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Fixed(2),

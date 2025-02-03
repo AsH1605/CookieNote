@@ -17,6 +17,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.cookie.note.data.local.CookieDatabase
 import com.cookie.note.data.local.entities.NoteRecord
 import com.cookie.note.domain.models.Note
+import com.cookie.note.presentation.App
 import com.cookie.note.presentation.screens.list.AllNotesScreen
 import com.cookie.note.presentation.screens.list.ListNoteVM
 import com.cookie.note.presentation.screens.list.model.UiState
@@ -34,8 +35,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CookieNoteTheme {
-                val listVM: ListNoteVM = viewModel()
-                AllNotesScreen(viewModel = listVM)
+                App()
             }
         }
     }

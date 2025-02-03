@@ -14,6 +14,7 @@ retrofitVersion = "2.11.0"
 kotlinxSerializationJson = "1.8.0"
 hiltAndroidVersion = "2.51.1"
 lifecycleViewModelVersion = "2.8.5"
+hiltNavVersion = "1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,6 +40,7 @@ kotlinx-serialization-json = {group = "org.jetbrains.kotlinx", name = "kotlinx-s
 dagger-hilt-android = {group = "com.google.dagger", name = "hilt-android", version.ref = "hiltAndroidVersion"}
 dagger-hilt-android-compiler = {group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltAndroidVersion"}
 androidx-lifecycle-viewmodel-compose = {group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleViewModelVersion"}
+hilt-navigation-compose = {group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavVersion"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
