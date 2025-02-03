@@ -5,13 +5,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
 
-    suspend fun createNote(title: String, content: String, userId: String): Note
+    suspend fun createNote(title: String, content: String, userId: Int)
 
-    suspend fun updateNote(title: String, content: String, userId: String, noteId: Int): Note
+    suspend fun updateNote(title: String, content: String, userId: Int, noteId: Int): Note
 
-    suspend fun deleteNote(userId: String, noteId: Int): Boolean
+    suspend fun deleteNote(userId: Int, noteId: Int): Boolean
 
-    suspend fun getNote(userId: String, noteId: Int): Note
+    suspend fun getNote(userId: Int, noteId: Int): Note
 
-    fun getAllNotes(userId: String): Flow<List<Note>>
+    fun getAllNotes(userId: Int): Flow<List<Note>>
 }

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.ksp)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.dagger.hilt.android)
 }
 
 android {
@@ -64,4 +65,7 @@ dependencies {
     implementation(libs.squareup.retrofit)
     implementation(libs.squareup.retrofit.converter.kotlinx)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.dagger.hilt.android)
+    ksp(libs.dagger.hilt.android.compiler)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 }

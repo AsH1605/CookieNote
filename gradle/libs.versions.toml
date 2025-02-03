@@ -12,6 +12,8 @@ roomVersion = "2.6.1"
 kspVersion = "2.0.0-1.0.23"
 retrofitVersion = "2.11.0"
 kotlinxSerializationJson = "1.8.0"
+hiltAndroidVersion = "2.51.1"
+lifecycleViewModelVersion = "2.8.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -34,6 +36,9 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 squareup-retrofit = {group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion"}
 squareup-retrofit-converter-kotlinx = {group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofitVersion"}
 kotlinx-serialization-json = {group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson"}
+dagger-hilt-android = {group = "com.google.dagger", name = "hilt-android", version.ref = "hiltAndroidVersion"}
+dagger-hilt-android-compiler = {group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltAndroidVersion"}
+androidx-lifecycle-viewmodel-compose = {group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycleViewModelVersion"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -41,3 +46,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }
 kotlinx-serialization = {id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin"}
+dagger-hilt-android = {id = "com.google.dagger.hilt.android", version.ref = "hiltAndroidVersion"}

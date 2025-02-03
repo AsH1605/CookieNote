@@ -23,6 +23,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
@@ -35,9 +37,17 @@ import com.cookie.note.presentation.screens.list.model.UiEvent
 import com.cookie.note.presentation.screens.list.model.UiState
 import java.util.Date
 
+@Composable
+fun AllNotesScreen(viewModel: ListNoteVM){
+    val uiState by viewModel.uiState.collectAsState()
+    uiState?.let { state->
+        AllNotesScreen(uiState = state, onUiEvent = {})
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AllNotesScreen(uiState: UiState, onUiEvent: (UiEvent)->Unit){
+private fun AllNotesScreen(uiState: UiState, onUiEvent: (UiEvent)->Unit){
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     
     Scaffold(

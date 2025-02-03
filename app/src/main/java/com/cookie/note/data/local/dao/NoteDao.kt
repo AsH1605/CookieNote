@@ -21,4 +21,7 @@ interface NoteDao {
 
     @Query("SELECT * FROM noteRecord")
     fun getAllNotes(): Flow<List<NoteRecord>>
+
+    @Insert
+    suspend fun insertNotes(notes: List<NoteRecord>)
 }
