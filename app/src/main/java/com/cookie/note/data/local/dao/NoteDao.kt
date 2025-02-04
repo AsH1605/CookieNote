@@ -16,8 +16,8 @@ interface NoteDao {
     @Update
     suspend fun updateNote(noteRecord: NoteRecord)
 
-    @Delete
-    suspend fun deleteNote(noteRecord: NoteRecord)
+    @Query("DELETE FROM noterecord WHERE userId = :userId AND localId = :noteId")
+    suspend fun deleteNote(userId: Int, noteId: Int)
 
     @Query("SELECT * FROM noteRecord")
     fun getAllNotes(): Flow<List<NoteRecord>>

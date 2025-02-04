@@ -1,5 +1,6 @@
 package com.cookie.note.data.repository
 
+import android.util.Log
 import com.cookie.note.data.local.dao.NoteDao
 import com.cookie.note.data.local.entities.NoteRecord
 import com.cookie.note.data.mapper.toNote
@@ -10,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import java.io.IOException
 
 class NoteRepositoryImpl(private val noteDao: NoteDao, private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : NoteRepository {
     override suspend fun createNote(title: String, content: String, userId: Int): Int = withContext(ioDispatcher) {
@@ -46,7 +48,15 @@ class NoteRepositoryImpl(private val noteDao: NoteDao, private val ioDispatcher:
     }
 
     override suspend fun deleteNote(userId: Int, noteId: Int): Boolean {
-        TODO("Not yet implemented")
+        return withContext(ioDispatcher){
+            try {
+                noteDao.deleteNote(userId, noteId)
+                true
+            }catch (e: IOException){
+                Log.e("NoteRepositoryImpl", e.toString())
+                false
+            }
+        }
     }
 
     override suspend fun getNote(userId: Int, noteId: Int): Note {
