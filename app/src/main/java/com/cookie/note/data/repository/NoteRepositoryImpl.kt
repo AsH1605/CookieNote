@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class NoteRepositoryImpl(private val noteDao: NoteDao, private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO) : NoteRepository {
-    override suspend fun createNote(title: String, content: String, userId: Int) = withContext(ioDispatcher) {
+    override suspend fun createNote(title: String, content: String, userId: Int): Int = withContext(ioDispatcher) {
         //we are creating timestamp and storing it in a variable instead of directly generating at use to ensure that createdate and last updated_at for the first time are same
         val millisNow = System.currentTimeMillis()
         val noteRecord = NoteRecord(
@@ -23,7 +23,7 @@ class NoteRepositoryImpl(private val noteDao: NoteDao, private val ioDispatcher:
             createdAt = millisNow,
             lastUpdatedAt = millisNow
         )
-        noteDao.insertNote(noteRecord)
+        noteDao.insertNote(noteRecord).toInt()
     }
 
     override suspend fun updateNote(
@@ -32,7 +32,17 @@ class NoteRepositoryImpl(private val noteDao: NoteDao, private val ioDispatcher:
         userId: Int,
         noteId: Int
     ): Note {
-        TODO("Not yet implemented")
+        return withContext(ioDispatcher){
+            val millisNow = System.currentTimeMillis()
+            noteDao.updateNoteById(
+                title = title,
+                content = content,
+                userId = userId,
+                noteId = noteId,
+                lastUpdatedAt = millisNow
+            )
+            noteDao.getNoteById(userId, noteId).toNote()
+        }
     }
 
     override suspend fun deleteNote(userId: Int, noteId: Int): Boolean {
@@ -40,7 +50,9 @@ class NoteRepositoryImpl(private val noteDao: NoteDao, private val ioDispatcher:
     }
 
     override suspend fun getNote(userId: Int, noteId: Int): Note {
-        TODO("Not yet implemented")
+        return withContext(ioDispatcher){
+            noteDao.getNoteById(userId, noteId).toNote()
+        }
     }
 
     override fun getAllNotes(userId: Int): Flow<List<Note>> {
@@ -50,5 +62,4 @@ class NoteRepositoryImpl(private val noteDao: NoteDao, private val ioDispatcher:
             }
         }
     }
-
 }

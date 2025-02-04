@@ -42,12 +42,13 @@ import com.cookie.note.presentation.screens.list.model.UiState
 import java.util.Date
 
 @Composable
-fun AllNotesScreen(viewModel: ListNoteVM, navigateToNoteEditor: () -> Unit){
+fun AllNotesScreen(viewModel: ListNoteVM, navigateToNoteEditor: (Int) -> Unit){
     val uiState by viewModel.uiState.collectAsState()
     uiState?.let { state->
         AllNotesScreen(uiState = state, onUiEvent = {event->
             when(event){
-                UiEvent.OnCreateNoteClicked -> navigateToNoteEditor()
+                UiEvent.OnCreateNoteClicked -> navigateToNoteEditor(-1)
+                is UiEvent.OnNoteClicked -> navigateToNoteEditor(event.noteId)
             }
         })
     }
@@ -98,18 +99,21 @@ private fun AllNotesScreen(uiState: UiState, onUiEvent: (UiEvent)->Unit){
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             items(uiState.allNotes){note->
-                NoteCard(note.title, note.content)
+                NoteCard(note.title, note.content, onClick = {
+                    onUiEvent(UiEvent.OnNoteClicked(note.localId))
+                })
             }
         }
     }
 }
 
 @Composable
-fun NoteCard(noteTitle: String, noteContent: String){
+fun NoteCard(noteTitle: String, noteContent: String, onClick: ()-> Unit){
     Card(
         modifier = Modifier
             .wrapContentHeight()
-            .fillMaxWidth(.5f)
+            .fillMaxWidth(.5f),
+        onClick = onClick
     ) {
         Column (
             modifier = Modifier.padding(8.dp)

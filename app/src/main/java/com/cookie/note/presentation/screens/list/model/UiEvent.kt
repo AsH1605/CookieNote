@@ -4,4 +4,5 @@ import android.util.Log
 
 sealed interface UiEvent {
     data object OnCreateNoteClicked : UiEvent
+    data class OnNoteClicked(val noteId: Int): UiEvent
 }
