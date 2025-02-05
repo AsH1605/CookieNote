@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.cookie.note.presentation.screens.editor.components.TransparentTextField
 import com.cookie.note.presentation.screens.editor.model.UiEvent
 import com.cookie.note.presentation.screens.editor.model.UiState
+import com.cookie.note.presentation.theme.CookieNoteTheme
 
 @Composable
 fun NoteEditorScreen(viewModel: NoteEditorVM, navigateUp: ()-> Unit) {
@@ -116,11 +117,28 @@ private fun NoteEditorScreen(
 @Preview
 @Composable
 private fun NoteEditorScreenPrev() {
-    NoteEditorScreen(
-        uiState = UiState(
-            title = "hiii",
-            content = "how are you"
-        ),
-        onUiEvent = {}
-    )
+    CookieNoteTheme {
+        NoteEditorScreen(
+            uiState = UiState(
+                title = "hiii",
+                content = "how are you"
+            ),
+            onUiEvent = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun NoteEditorScreenPrev1() {
+    CookieNoteTheme (darkTheme = true){
+        NoteEditorScreen(
+            uiState = UiState(
+                title = "hiii",
+                content = "how are you"
+            ),
+            onUiEvent = {}
+        )
+    }
+
 }

@@ -3,6 +3,7 @@ package com.cookie.note.presentation.screens.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cookie.note.domain.repositories.NoteRepository
+import com.cookie.note.presentation.screens.list.model.UiEvent
 import com.cookie.note.presentation.screens.list.model.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +31,16 @@ class ListNoteVM @Inject constructor(
                 username = "appleeee",
                 allNotes = notes
             ) }
+        }
+    }
+
+    fun onUiEvent(event: UiEvent){
+        when(event){
+            UiEvent.OnCreateNoteClicked -> {}
+            is UiEvent.OnDeleteNote -> viewModelScope.launch{
+                    noteRepository.deleteNote(noteId = event.noteId, userId = 1)
+            }
+            is UiEvent.OnNoteClicked -> {}
         }
     }
 }

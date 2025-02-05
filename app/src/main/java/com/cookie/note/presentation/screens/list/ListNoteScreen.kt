@@ -23,12 +23,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxState
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
@@ -39,16 +44,20 @@ import androidx.compose.ui.unit.sp
 import com.cookie.note.domain.models.Note
 import com.cookie.note.presentation.screens.list.model.UiEvent
 import com.cookie.note.presentation.screens.list.model.UiState
+import com.cookie.note.presentation.theme.CookieNoteTheme
 import java.util.Date
 
 @Composable
-fun AllNotesScreen(viewModel: ListNoteVM, navigateToNoteEditor: (Int) -> Unit){
+fun AllNotesScreen(viewModel: ListNoteVM, navigateToNoteEditor: (Int) -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
-    uiState?.let { state->
-        AllNotesScreen(uiState = state, onUiEvent = {event->
-            when(event){
+    uiState?.let { state ->
+        AllNotesScreen(uiState = state, onUiEvent = { event ->
+            when (event) {
                 UiEvent.OnCreateNoteClicked -> navigateToNoteEditor(-1)
                 is UiEvent.OnNoteClicked -> navigateToNoteEditor(event.noteId)
+                else -> {
+                    viewModel.onUiEvent(event)
+                }
             }
         })
     }
@@ -56,9 +65,10 @@ fun AllNotesScreen(viewModel: ListNoteVM, navigateToNoteEditor: (Int) -> Unit){
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AllNotesScreen(uiState: UiState, onUiEvent: (UiEvent)->Unit){
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-    
+private fun AllNotesScreen(uiState: UiState, onUiEvent: (UiEvent) -> Unit) {
+    val scrollBehavior =
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -81,16 +91,18 @@ private fun AllNotesScreen(uiState: UiState, onUiEvent: (UiEvent)->Unit){
                 scrollBehavior = scrollBehavior
             )
         },
-        floatingActionButton = { FloatingActionButton(
-            onClick = {onUiEvent(UiEvent.OnCreateNoteClicked)}
-        ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add note",
-                modifier = Modifier.size(23.dp)
-            )
-        } }
-    ) {padding->
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { onUiEvent(UiEvent.OnCreateNoteClicked) }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add note",
+                    modifier = Modifier.size(23.dp)
+                )
+            }
+        }
+    ) { padding ->
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Fixed(2),
             modifier = Modifier.padding(padding),
@@ -98,26 +110,36 @@ private fun AllNotesScreen(uiState: UiState, onUiEvent: (UiEvent)->Unit){
             verticalItemSpacing = 8.dp,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(uiState.allNotes){note->
-                NoteCard(note.title, note.content, onClick = {
-                    onUiEvent(UiEvent.OnNoteClicked(note.localId))
-                })
+            items(uiState.allNotes) { note ->
+                val swipeDismissedState =
+                    rememberSwipeToDismissBoxState(confirmValueChange = { value ->
+                        onUiEvent(UiEvent.OnDeleteNote(noteId = note.localId))
+                        value == SwipeToDismissBoxValue.StartToEnd
+                    })
+                SwipeToDismissBox(
+                    swipeDismissedState,
+                    backgroundContent = {}
+                ) {
+                    NoteCard(note.title, note.content, onClick = {
+                        onUiEvent(UiEvent.OnNoteClicked(note.localId))
+                    })
+                }
             }
         }
     }
 }
 
 @Composable
-fun NoteCard(noteTitle: String, noteContent: String, onClick: ()-> Unit){
+fun NoteCard(noteTitle: String, noteContent: String, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .wrapContentHeight()
-            .fillMaxWidth(.5f),
+            .fillMaxWidth(),
         onClick = onClick
     ) {
-        Column (
+        Column(
             modifier = Modifier.padding(8.dp)
-        ){
+        ) {
             Text(
                 text = noteTitle,
                 modifier = Modifier,
@@ -142,30 +164,65 @@ fun NoteCard(noteTitle: String, noteContent: String, onClick: ()-> Unit){
 @Preview
 @Composable
 private fun AllNotesScreenPreview() {
-    AllNotesScreen(
-        uiState = UiState(
-            username = "apple",
-            allNotes = listOf(
-                Note(
-                    title = "hello",
-                    content = "bye bye",
-                    lastUpdatedAt = Date(),
-                    localId = 1
-                ),
-                Note(
-                    title = "hello",
-                    content = "bye bye bye bye bye bye bye bye bey bye bye bye bye bye bye bye bye beybye bye bye bye bye bye bye bye bey ",
-                    lastUpdatedAt = Date(),
-                    localId = 1
-                ),
-                Note(
-                    title = "hello",
-                    content = "bye bye",
-                    lastUpdatedAt = Date(),
-                    localId = 1
+    CookieNoteTheme {
+        AllNotesScreen(
+            uiState = UiState(
+                username = "apple",
+                allNotes = listOf(
+                    Note(
+                        title = "hello",
+                        content = "bye bye",
+                        lastUpdatedAt = Date(),
+                        localId = 1
+                    ),
+                    Note(
+                        title = "hello",
+                        content = "bye bye bye bye bye bye bye bye bey bye bye bye bye bye bye bye bye beybye bye bye bye bye bye bye bye bey ",
+                        lastUpdatedAt = Date(),
+                        localId = 1
+                    ),
+                    Note(
+                        title = "hello",
+                        content = "bye bye",
+                        lastUpdatedAt = Date(),
+                        localId = 1
+                    )
                 )
-            )
-        ),
-        onUiEvent = {}
-    )
+            ),
+            onUiEvent = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AllNotesScreenPreview1() {
+    CookieNoteTheme(darkTheme = true) {
+        AllNotesScreen(
+            uiState = UiState(
+                username = "apple",
+                allNotes = listOf(
+                    Note(
+                        title = "hello",
+                        content = "bye bye",
+                        lastUpdatedAt = Date(),
+                        localId = 1
+                    ),
+                    Note(
+                        title = "hello",
+                        content = "bye bye bye bye bye bye bye bye bey bye bye bye bye bye bye bye bye beybye bye bye bye bye bye bye bye bey ",
+                        lastUpdatedAt = Date(),
+                        localId = 1
+                    ),
+                    Note(
+                        title = "hello",
+                        content = "bye bye",
+                        lastUpdatedAt = Date(),
+                        localId = 1
+                    )
+                )
+            ),
+            onUiEvent = {}
+        )
+    }
 }

@@ -25,10 +25,10 @@ fun TransparentTextField(
         BasicTextField(
             value = value,
             onValueChange = onValueChange,
-            textStyle = style,
+            textStyle = style.copy(color = MaterialTheme.colorScheme.onBackground),
             singleLine = singleLine,
             cursorBrush = SolidColor(MaterialTheme.colorScheme.onBackground),
-            enabled = enabled
+            enabled = enabled,
         )
         if(value == "" && hint != ""){
             Text(
