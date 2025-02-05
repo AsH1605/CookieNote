@@ -11,23 +11,35 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.cookie.note.presentation.screens.editor.components.TransparentTextField
 import com.cookie.note.presentation.screens.editor.model.UiEvent
 import com.cookie.note.presentation.screens.editor.model.UiState
 
 @Composable
-fun NoteEditorScreen(viewModel: NoteEditorVM) {
+fun NoteEditorScreen(viewModel: NoteEditorVM, navigateUp: ()-> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     NoteEditorScreen(uiState = uiState, onUiEvent = {event->
-        viewModel.onUiEvent(event)
+        if(event is UiEvent.OnNavigateUpClicked){
+            navigateUp()
+        }
+        else{
+            viewModel.onUiEvent(event)
+        }
     })
 }
 
@@ -38,16 +50,22 @@ private fun NoteEditorScreen(
     onUiEvent: (UiEvent) -> Unit
 ){
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val isCollapsed by remember { derivedStateOf { scrollBehavior.state.collapsedFraction > 0.5 } }
+
     Scaffold (
-        modifier = Modifier,
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             LargeTopAppBar(
                 title = {
-                    TextField(
+                    TransparentTextField(
                         value = uiState.title,
                         onValueChange = {updatedTitle->
                             onUiEvent(UiEvent.OnTitleUpdate(updatedTitle))
-                        }
+                        },
+                        singleLine = true,
+                        hint = "Title",
+                        style = MaterialTheme.typography.headlineMedium,
+                        enabled = !isCollapsed
                     )
                 },
                 navigationIcon = {
@@ -79,12 +97,17 @@ private fun NoteEditorScreen(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .padding(horizontal = 16.dp)
         ){
-            TextField(
+            TransparentTextField(
                 value = uiState.content,
                 onValueChange = {updatedContent->
                     onUiEvent(UiEvent.OnContentUpdate(updatedContent))
-                }
+                },
+                modifier = Modifier.fillMaxSize(),
+                singleLine = false,
+                hint = "Type Here...",
+                style = MaterialTheme.typography.bodyLarge
             )
         }
     }

@@ -33,7 +33,12 @@ fun App() {
             },
         ))){
             val viewModel: NoteEditorVM = hiltViewModel()
-            NoteEditorScreen(viewModel)
+            NoteEditorScreen(
+                viewModel,
+                navigateUp = {
+                    navController.navigateUp()
+                }
+            )
         }
     }
 }
