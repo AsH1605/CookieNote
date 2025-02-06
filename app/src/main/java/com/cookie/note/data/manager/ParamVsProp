@@ -1,0 +1,76 @@
+class PreferencesManagerImpl(context: Context): PreferencesManager {
+
+    private val preferences = context.settingsDataStore
+
+    override suspend fun getLoggedInWorkerId(): Int? {
+        return preferences.data.map { prefs->
+            prefs[PreferencesKeys.loggedInUserKey]
+        }
+            .first()
+    }
+
+    override suspend fun setLoggedInWorker(id: Int) {
+        preferences.edit { prefs->
+            prefs[PreferencesKeys.loggedInUserKey] = id
+        }
+    }
+}
+
+class PreferencesManagerImpl(private val context: Context): PreferencesManager {
+
+    private val preferences = context.settingsDataStore
+
+    override suspend fun getLoggedInWorkerId(): Int? {
+        return preferences.data.map { prefs->
+            prefs[PreferencesKeys.loggedInUserKey]
+        }
+            .first()
+    }
+
+    override suspend fun setLoggedInWorker(id: Int) {
+        preferences.edit { prefs->
+            prefs[PreferencesKeys.loggedInUserKey] = id
+        }
+    }
+}
+
+class PreferencesManagerImpl extends PreferencesManager {
+    private Preferences pref;
+
+    void PreferencesManagerImpl(Context context) {
+        this.prefs = context.settingsDataStore
+    }
+
+    @override
+    int getLoggedInWorkerId() {
+        // impl
+        context. // Wrong X
+    }
+
+     @override
+    void setLoggedInWorker(int id) {
+        // impl
+    }
+}
+
+
+class PreferencesManagerImpl extends PreferencesManager {
+    private Preferences pref;
+    private Context context;
+
+    void PreferencesManagerImpl(Context context) {
+        this.prefs = context.settingsDataStore;
+        this.context = context;
+    }
+
+    @override
+    int getLoggedInWorkerId() {
+        // impl
+        context. // Acceptable
+    }
+
+     @override
+    void setLoggedInWorker(int id) {
+        // impl
+    }
+}
