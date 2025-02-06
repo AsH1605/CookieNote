@@ -17,7 +17,7 @@ fun TransparentTextField(
     style: TextStyle = TextStyle.Default,
     singleLine: Boolean = false,
     hint: String = "",
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
     Box(
         modifier = modifier

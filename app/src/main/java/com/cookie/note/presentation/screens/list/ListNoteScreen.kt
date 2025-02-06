@@ -17,11 +17,13 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxState
@@ -35,6 +37,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -65,7 +68,10 @@ fun AllNotesScreen(viewModel: ListNoteVM, navigateToNoteEditor: (Int) -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AllNotesScreen(uiState: UiState, onUiEvent: (UiEvent) -> Unit) {
+private fun AllNotesScreen(
+    uiState: UiState,
+    onUiEvent: (UiEvent) -> Unit)
+{
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
@@ -135,6 +141,12 @@ fun NoteCard(noteTitle: String, noteContent: String, onClick: () -> Unit) {
         modifier = Modifier
             .wrapContentHeight()
             .fillMaxWidth(),
+        colors = CardColors(
+            containerColor = MaterialTheme.colorScheme.tertiary,
+            contentColor = MaterialTheme.colorScheme.onTertiary,
+            disabledContainerColor = MaterialTheme.colorScheme.tertiary,
+            disabledContentColor = MaterialTheme.colorScheme.secondary
+        ),
         onClick = onClick
     ) {
         Column(
