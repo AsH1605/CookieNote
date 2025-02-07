@@ -70,4 +70,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.androidx.datastore)
+    implementation(libs.squareup.okHttp)
 }

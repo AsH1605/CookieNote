@@ -109,8 +109,8 @@ fun CookieNoteTheme(
         typography = Typography,
         content = {
             Surface(
-                color = MaterialTheme.colorScheme.background,
-                contentColor = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onPrimary,
+                contentColor = MaterialTheme.colorScheme.primary
             ) { content() }
         }
     )

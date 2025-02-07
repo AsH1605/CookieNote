@@ -38,14 +38,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CookieNoteTheme {
-//                App()
-                UserLoginScreen(
-                    onUiEvent = {},
-                    uiState = com.cookie.note.presentation.screens.login.model.UiState(
-                        username = "username",
-                        password = "password"
-                    )
-                )
+                App()
             }
         }
     }

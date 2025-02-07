@@ -24,17 +24,21 @@ class OnBoardingRepositoryImpl(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : OnBoardingRepository {
 
-    companion object{
+    companion object {
         private const val TAG = "OnBoardingRepositoryImpl"
     }
 
-    override suspend fun registerUser(username: String, email: String, password: String): Result<Unit> {
-        return withContext(ioDispatcher){
+    override suspend fun registerUser(
+        username: String,
+        email: String,
+        password: String
+    ): Result<Unit> {
+        return withContext(ioDispatcher) {
             try {
                 val request = RegisterUserRequest(username, email, password)
                 userApi.registerUser(request)
                 Result.Success(Unit)
-            }catch (e: HttpException){
+            } catch (e: HttpException) {
                 Log.e(TAG, e.message())
                 Result.Failure(e.message())
             }
@@ -42,7 +46,7 @@ class OnBoardingRepositoryImpl(
     }
 
     override suspend fun loginUser(username: String, password: String): Result<User> {
-        return withContext(ioDispatcher){
+        return withContext(ioDispatcher) {
             try {
                 val loginRequest = LoginUserRequest(username, password)
                 val response = userApi.loginUser(loginRequest)
@@ -58,10 +62,19 @@ class OnBoardingRepositoryImpl(
                 userDao.addUser(userRecord)
                 preferencesManager.setLoggedInWorker(userRecord.id)
                 Result.Success(userRecord.toUser())
-            }catch (e: HttpException){
+            } catch (e: HttpException) {
                 Log.e(TAG, e.message())
                 Result.Failure(e.message())
             }
         }
+    }
+
+    override suspend fun getLoggedInUserId(): Int? {
+        return withContext(
+            context = ioDispatcher,
+            block = {
+                preferencesManager.getLoggedInWorkerId()
+            }
+        )
     }
 }
