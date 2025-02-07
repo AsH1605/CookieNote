@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CookieNote</string>
+    <string name="error_blank_username">Username is blank</string>
+    <string name="error_blank_password">Password is blank.</string>
 </resources>
