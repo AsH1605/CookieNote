@@ -6,6 +6,7 @@ import com.cookie.note.data.local.dao.UserDao
 import com.cookie.note.data.local.entities.UserRecord
 import com.cookie.note.data.mapper.toUser
 import com.cookie.note.data.remote.UserApi
+import com.cookie.note.data.remote.dto.NetworkError
 import com.cookie.note.data.remote.dto.user.LoginUserRequest
 import com.cookie.note.data.remote.dto.user.RegisterUserRequest
 import com.cookie.note.domain.managers.PreferencesManager
@@ -15,6 +16,7 @@ import com.cookie.note.domain.util.isoTimestampToDate
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 
 class OnBoardingRepositoryImpl(
@@ -76,5 +78,17 @@ class OnBoardingRepositoryImpl(
                 preferencesManager.getLoggedInWorkerId()
             }
         )
+    }
+
+    private suspend fun getError(e: HttpException): NetworkError{
+        when(e.code()){
+            401-> {
+                val errorBody = e.response()?.errorBody()?.string()
+                if(errorBody!=null){
+                    val error = Json.decodeFromString<NetworkError>(errorBody)
+                    return error
+                }
+            }
+        }
     }
 }
