@@ -53,7 +53,7 @@ import java.util.Date
 @Composable
 fun AllNotesScreen(viewModel: ListNoteVM, navigateToNoteEditor: (Int) -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
-    uiState?.let { state ->
+    uiState?.let { state -> //let because uiState is nullable here
         AllNotesScreen(uiState = state, onUiEvent = { event ->
             when (event) {
                 UiEvent.OnCreateNoteClicked -> navigateToNoteEditor(-1)

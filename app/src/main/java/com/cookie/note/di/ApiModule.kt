@@ -11,6 +11,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Singleton
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.create
 
 @Module
@@ -19,12 +21,23 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideRetrofitInstance(): Retrofit{
+    fun provideHttpClient(): OkHttpClient{
+        val interceptor = HttpLoggingInterceptor()
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
+        return OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofitInstance(client: OkHttpClient): Retrofit{
         return Retrofit.Builder()
-            .baseUrl("https://example.com/")
+            .baseUrl("http://192.168.0.182:3000")
+            .client(client)
             .addConverterFactory(
                 Json.asConverterFactory(
-                    "application/json; charset=UTF8".toMediaType()))
+                    "application/json; charset=utf-8".toMediaType()))
             .build()
     }
 

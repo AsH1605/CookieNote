@@ -71,4 +71,5 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     implementation(libs.androidx.datastore)
     implementation(libs.squareup.okHttp)
+    implementation(libs.squareup.okHttp.interceptor)
 }

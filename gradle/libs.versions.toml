@@ -45,6 +45,8 @@ androidx-lifecycle-viewmodel-compose = {group = "androidx.lifecycle", name = "li
 hilt-navigation-compose = {group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavVersion"}
 androidx-datastore = {group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDatastoreVersion"}
 squareup-okHttp = {group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okHttpVersion"}
+squareup-okHttp-interceptor = {group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttpVersion"}
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

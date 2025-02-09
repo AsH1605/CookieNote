@@ -13,6 +13,10 @@ import com.cookie.note.presentation.screens.editor.NoteEditorScreen
 import com.cookie.note.presentation.screens.editor.NoteEditorVM
 import com.cookie.note.presentation.screens.list.AllNotesScreen
 import com.cookie.note.presentation.screens.list.ListNoteVM
+import com.cookie.note.presentation.screens.login.UserLoginScreen
+import com.cookie.note.presentation.screens.login.UserLoginVM
+import com.cookie.note.presentation.screens.register.UserRegisterScreen
+import com.cookie.note.presentation.screens.register.UserRegisterVM
 import com.cookie.note.presentation.screens.splash.SplashScreen
 import com.cookie.note.presentation.screens.splash.SplashScreenVM
 
@@ -20,7 +24,7 @@ import com.cookie.note.presentation.screens.splash.SplashScreenVM
 fun App() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "note_list_screen") {
+    NavHost(navController = navController, startDestination = "splash_screen") {
 
         composable(route = "splash_screen"){
             val viewModel = hiltViewModel<SplashScreenVM>()
@@ -36,7 +40,24 @@ fun App() {
         }
 
         composable(route = "login_screen"){
-//            val
+            val viewModel = hiltViewModel<UserLoginVM>()
+            UserLoginScreen(
+                viewModel = viewModel,
+                navigateToRegisterUser = {
+                    navController.navigate("register_screen")
+                },
+                navigateToListNoteScreen = {
+                    navController.navigate("note_list_screen")
+                }
+            )
+        }
+
+        composable(route = "register_screen"){
+            val viewModel = hiltViewModel<UserRegisterVM>()
+            UserRegisterScreen(
+                viewModel = viewModel,
+                navigateToLoginScreen = {navController.navigate("login_screen")},
+            )
         }
 
         composable(route = "note_list_screen"){
