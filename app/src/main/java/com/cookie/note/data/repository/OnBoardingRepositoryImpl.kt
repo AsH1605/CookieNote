@@ -4,14 +4,15 @@ import com.cookie.note.domain.result.Result
 import android.util.Log
 import com.cookie.note.data.local.dao.UserDao
 import com.cookie.note.data.local.entities.UserRecord
+import com.cookie.note.data.mapper.toDomainError
 import com.cookie.note.data.mapper.toUser
 import com.cookie.note.data.remote.UserApi
-import com.cookie.note.data.remote.dto.NetworkError
 import com.cookie.note.data.remote.dto.user.LoginUserRequest
 import com.cookie.note.data.remote.dto.user.RegisterUserRequest
 import com.cookie.note.domain.managers.PreferencesManager
 import com.cookie.note.domain.models.User
 import com.cookie.note.domain.repositories.OnBoardingRepository
+import com.cookie.note.domain.result.DomainError
 import com.cookie.note.domain.util.isoTimestampToDate
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +35,7 @@ class OnBoardingRepositoryImpl(
         username: String,
         email: String,
         password: String
-    ): Result<Unit> {
+    ): Result<Unit, DomainError> {
         return withContext(ioDispatcher) {
             try {
                 val request = RegisterUserRequest(username, email, password)
@@ -42,12 +43,12 @@ class OnBoardingRepositoryImpl(
                 Result.Success(Unit)
             } catch (e: HttpException) {
                 Log.e(TAG, e.message())
-                Result.Failure(e.message())
+                Result.Failure(e.toDomainError())
             }
         }
     }
 
-    override suspend fun loginUser(username: String, password: String): Result<User> {
+    override suspend fun loginUser(username: String, password: String): Result<User, DomainError> {
         return withContext(ioDispatcher) {
             try {
                 val loginRequest = LoginUserRequest(username, password)
@@ -66,7 +67,7 @@ class OnBoardingRepositoryImpl(
                 Result.Success(userRecord.toUser())
             } catch (e: HttpException) {
                 Log.e(TAG, e.message())
-                Result.Failure(e.message())
+                Result.Failure(e.toDomainError())
             }
         }
     }
@@ -78,17 +79,5 @@ class OnBoardingRepositoryImpl(
                 preferencesManager.getLoggedInWorkerId()
             }
         )
-    }
-
-    private suspend fun getError(e: HttpException): NetworkError{
-        when(e.code()){
-            401-> {
-                val errorBody = e.response()?.errorBody()?.string()
-                if(errorBody!=null){
-                    val error = Json.decodeFromString<NetworkError>(errorBody)
-                    return error
-                }
-            }
-        }
     }
 }

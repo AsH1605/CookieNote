@@ -1,14 +1,11 @@
 package com.cookie.note.data.remote.dto.user
 
+import kotlinx.serialization.SerialName
 import java.util.Date
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class RegisterUserResponse(
-    val id: Int,
-    val username: String,
-    val email: String,
-    val password: String,
-    val idToken: String,
-    val createdAt: Date,
-    val lastUpdatedAt: Date
+    val message: String
 )
 

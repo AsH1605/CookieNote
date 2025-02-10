@@ -96,7 +96,7 @@ private fun UserRegisterScreen(
                     onUiEvent(UiEvent.OnEmailUpdate(updatedEmail))
                 },
                 placeholder = {
-                    Text("Username")
+                    Text("Email")
                 },
                 modifier = Modifier.fillMaxWidth(0.8f)
             )
@@ -113,7 +113,7 @@ private fun UserRegisterScreen(
             )
             Spacer(Modifier.height(16.dp))
             Button(
-                onClick = {},
+                onClick = {onUiEvent(UiEvent.OnRegisterClicked)},
                 modifier = Modifier.fillMaxWidth(0.8f),
                 shape = RoundedCornerShape(4.dp)
             ) {

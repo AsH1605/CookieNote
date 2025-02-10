@@ -3,6 +3,8 @@ package com.cookie.note.presentation.screens.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cookie.note.domain.repositories.OnBoardingRepository
+import com.cookie.note.domain.result.DomainError
+import com.cookie.note.domain.result.UserErrorCodes
 import com.cookie.note.domain.result.onFailure
 import com.cookie.note.domain.result.onSuccess
 import com.cookie.note.presentation.model.Error
@@ -62,13 +64,11 @@ class UserLoginVM @Inject constructor(
                 _vmEvent.emit(VMEvent.NavigateToListNoteScreen)
             }
             .onFailure {error->
-                //TODO: IF ERROR IS UNREGISTERED USER THEN NAVIGATE TO REGISTER SCREEN
-                val isUserUnregistered = false
-                if(isUserUnregistered){
+                if(error is DomainError.ApiError && error.code == UserErrorCodes.USER_DOES_NOT_EXIST.code){
                     _vmEvent.emit(VMEvent.NavigateToRegisterUser)
                 }
                 else{
-                    _uiState.update { it.copy(error = Error.BackendError(error)) }
+                    _uiState.update { it.copy(error = Error.BackendError(error.getErrorMessage())) }
                 }
             }
     }

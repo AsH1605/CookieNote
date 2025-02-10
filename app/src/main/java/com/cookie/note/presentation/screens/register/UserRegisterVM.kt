@@ -71,7 +71,7 @@ class UserRegisterVM @Inject constructor(
                 _vmEvent.emit(VMEvent.NavigateToLogin)
             }
             .onFailure {error->
-                _uiState.update { it.copy(error = Error.BackendError(error)) }
+                _uiState.update { it.copy(error = Error.BackendError(error.getErrorMessage())) }
             }
     }
 }
