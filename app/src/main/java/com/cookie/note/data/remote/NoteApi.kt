@@ -21,11 +21,11 @@ interface NoteApi {
     suspend fun getAllNotes(@Header("id_token") idToken: String): List<NoteResponse>
 
     @GET("notes/getNote/{note_id}")
-    suspend fun getNote(@Header("id_token") idToken: String, @Path("note_id") noteId: String): NoteResponse
+    suspend fun getNote(@Header("id_token") idToken: String, @Path("note_id") noteId: Int): NoteResponse
 
     @DELETE("notes/deleteNote/{note_id}")
-    suspend fun deleteNote(@Header("id_token") idToken: String, @Path("note_id") noteId: String): Boolean
+    suspend fun deleteNote(@Header("id_token") idToken: String, @Path("note_id") noteId: Int): Boolean
 
     @PUT("notes/updateNote/{note_id}")
-    suspend fun updateNote(@Header("id_token") idToken: String, @Path("note_id") noteId: String, @Body updateNoteRequest: UpdateNoteRequest): NoteResponse
+    suspend fun updateNote(@Header("id_token") idToken: String, @Path("note_id") noteId: Int, @Body updateNoteRequest: UpdateNoteRequest): NoteResponse
 }

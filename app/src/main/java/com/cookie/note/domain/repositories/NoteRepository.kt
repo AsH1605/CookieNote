@@ -9,7 +9,7 @@ interface NoteRepository {
 
     suspend fun createNote(title: String, content: String): Result<Int, DomainError>
 
-    suspend fun updateNote(title: String, content: String, noteId: Int): Note
+    suspend fun updateNote(title: String, content: String, noteId: Int): Result<Note, DomainError>
 
     suspend fun deleteNote(noteId: Int): Boolean
 

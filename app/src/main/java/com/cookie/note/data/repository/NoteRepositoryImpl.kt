@@ -8,6 +8,7 @@ import com.cookie.note.data.mapper.toNote
 import com.cookie.note.data.mapper.toNoteRecord
 import com.cookie.note.data.remote.NoteApi
 import com.cookie.note.data.remote.dto.note.CreateNoteRequest
+import com.cookie.note.data.remote.dto.note.UpdateNoteRequest
 import com.cookie.note.domain.managers.NoteLocationManager
 import com.cookie.note.domain.managers.PreferencesManager
 import com.cookie.note.domain.models.Note
@@ -30,54 +31,65 @@ class NoteRepositoryImpl(
     private val locationManager: NoteLocationManager,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : NoteRepository {
-    override suspend fun createNote(title: String, content: String): Result<Int, DomainError> = withContext(ioDispatcher) {
-        val userId = preferencesManager.getLoggedInWorkerId()
-            ?: return@withContext Result.Failure(DomainError.NoLoggedInWorker)
-        try{
-            val idToken = userDao.getIdTokenForUser(userId)
-            val location = locationManager.getLocation()
-            val createNoteRequest = CreateNoteRequest(
-                title = title,
-                content = content,
-                latitude = location?.latitude,
-                longitude = location?.longitude,
-                address = location?.address
-            )
-            val response = noteApi.createNote(
-                idToken = idToken,
-                createNoteRequest = createNoteRequest
-            )
-            val localId = noteDao.insertNote(response.toNoteRecord()).toInt()
-            Result.Success(localId)
+    override suspend fun createNote(title: String, content: String): Result<Int, DomainError> =
+        withContext(ioDispatcher) {
+            val userId = preferencesManager.getLoggedInWorkerId()
+                ?: return@withContext Result.Failure(DomainError.NoLoggedInWorker)
+            try {
+                val idToken = userDao.getIdTokenForUser(userId)
+                val location = locationManager.getLocation()
+                val createNoteRequest = CreateNoteRequest(
+                    title = title,
+                    content = content,
+                    latitude = location?.latitude,
+                    longitude = location?.longitude,
+                    address = location?.address
+                )
+                val response = noteApi.createNote(
+                    idToken = idToken,
+                    createNoteRequest = createNoteRequest
+                )
+                val localId = noteDao.insertNote(response.toNoteRecord()).toInt()
+                Result.Success(localId)
 
-        }catch (e: HttpException){
-            Result.Failure(e.toDomainError())
+            } catch (e: HttpException) {
+                Result.Failure(e.toDomainError())
+            }
         }
-    }
 
     override suspend fun updateNote(
         title: String,
         content: String,
         noteId: Int
-    ): Note {
-        return withContext(ioDispatcher){
-            val millisNow = System.currentTimeMillis()
-            noteDao.updateNoteById(
+    ): Result<Note, DomainError> = withContext(ioDispatcher) {
+        val userId = preferencesManager.getLoggedInWorkerId()
+            ?: return@withContext Result.Failure(DomainError.NoLoggedInWorker)
+        try {
+            val idToken = userDao.getIdTokenForUser(userId)
+            val note = noteDao.getNoteById(noteId)
+            val updateNoteRequest = UpdateNoteRequest(
                 title = title,
-                content = content,
-                noteId = noteId,
-                lastUpdatedAt = millisNow
+                content = content
             )
-            noteDao.getNoteById(noteId).toNote()
+            val response = noteApi.updateNote(
+                idToken = idToken,
+                noteId = note.id,
+                updateNoteRequest = updateNoteRequest
+            )
+            noteDao.updateNote(response.toNoteRecord())
+            val updatedNote = noteDao.getNoteById(noteId).toNote()
+            Result.Success(updatedNote)
+        } catch (e: HttpException) {
+            Result.Failure(e.toDomainError())
         }
     }
 
     override suspend fun deleteNote(noteId: Int): Boolean {
-        return withContext(ioDispatcher){
+        return withContext(ioDispatcher) {
             try {
                 noteDao.deleteNote(noteId)
                 true
-            }catch (e: IOException){
+            } catch (e: IOException) {
                 Log.e("NoteRepositoryImpl", e.toString())
                 false
             }
@@ -85,8 +97,8 @@ class NoteRepositoryImpl(
     }
 
     override suspend fun getNote(noteId: Int): Note? {
-        val userId = preferencesManager.getLoggedInWorkerId()?: return null
-        return withContext(ioDispatcher){
+        val userId = preferencesManager.getLoggedInWorkerId() ?: return null
+        return withContext(ioDispatcher) {
             noteDao.getNoteById(noteId).toNote()
         }
     }

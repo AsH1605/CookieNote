@@ -88,7 +88,6 @@ class NoteEditorVM @Inject constructor(
                 noteId = id
             )
         }
-
     }
 
     private fun onContentUpdate(updatedContent: String) {
