@@ -2,6 +2,7 @@ package com.cookie.note.di
 
 import com.cookie.note.data.local.dao.NoteDao
 import com.cookie.note.data.local.dao.UserDao
+import com.cookie.note.data.remote.NoteApi
 import com.cookie.note.data.remote.UserApi
 import com.cookie.note.data.repository.NoteRepositoryImpl
 import com.cookie.note.data.repository.OnBoardingRepositoryImpl
@@ -20,8 +21,18 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideNoteRepository(dao: NoteDao): NoteRepository{
-        return NoteRepositoryImpl(dao)
+    fun provideNoteRepository(
+        dao: NoteDao,
+        api: NoteApi,
+        userDao: UserDao,
+        preferencesManager: PreferencesManager
+    ): NoteRepository {
+        return NoteRepositoryImpl(
+            noteDao = dao,
+            userDao = userDao,
+            noteApi = api,
+            preferencesManager = preferencesManager
+        )
     }
 
     @Provides
@@ -30,7 +41,7 @@ object RepositoryModule {
         dao: UserDao,
         api: UserApi,
         preferencesManager: PreferencesManager,
-    ): OnBoardingRepository{
+    ): OnBoardingRepository {
         return OnBoardingRepositoryImpl(
             userDao = dao,
             userApi = api,

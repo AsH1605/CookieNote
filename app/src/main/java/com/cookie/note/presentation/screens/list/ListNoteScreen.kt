@@ -25,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
@@ -74,7 +75,6 @@ private fun AllNotesScreen(
 {
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
-
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -99,7 +99,8 @@ private fun AllNotesScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { onUiEvent(UiEvent.OnCreateNoteClicked) }
+                onClick = { onUiEvent(UiEvent.OnCreateNoteClicked) },
+                containerColor = MaterialTheme.colorScheme.secondaryContainer
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
@@ -142,8 +143,8 @@ fun NoteCard(noteTitle: String, noteContent: String, onClick: () -> Unit) {
             .wrapContentHeight()
             .fillMaxWidth(),
         colors = CardColors(
-            containerColor = MaterialTheme.colorScheme.tertiary,
-            contentColor = MaterialTheme.colorScheme.onTertiary,
+            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
             disabledContainerColor = MaterialTheme.colorScheme.tertiary,
             disabledContentColor = MaterialTheme.colorScheme.secondary
         ),

@@ -1,11 +1,13 @@
 package com.cookie.note.domain.repositories
 
 import com.cookie.note.domain.models.Note
+import com.cookie.note.domain.result.DomainError
+import com.cookie.note.domain.result.Result
 import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
 
-    suspend fun createNote(title: String, content: String, userId: Int): Int
+    suspend fun createNote(title: String, content: String): Result<Int, DomainError>
 
     suspend fun updateNote(title: String, content: String, userId: Int, noteId: Int): Note
 

@@ -14,18 +14,18 @@ import retrofit2.http.Path
 
 interface NoteApi {
 
-    @POST("createNote")
+    @POST("notes/createNote")
     suspend fun createNote(@Header("id_token") idToken: String, @Body createNoteRequest: CreateNoteRequest): NoteResponse
 
-    @GET("getNotes")
+    @GET("notes/getNotes")
     suspend fun getAllNotes(@Header("id_token") idToken: String): List<NoteResponse>
 
-    @GET("getNote/{note_id}")
+    @GET("notes/getNote/{note_id}")
     suspend fun getNote(@Header("id_token") idToken: String, @Path("note_id") noteId: String): NoteResponse
 
-    @DELETE("deleteNote/{note_id}")
+    @DELETE("notes/deleteNote/{note_id}")
     suspend fun deleteNote(@Header("id_token") idToken: String, @Path("note_id") noteId: String): Boolean
 
-    @PUT("updateNote/{note_id}")
+    @PUT("notes/updateNote/{note_id}")
     suspend fun updateNote(@Header("id_token") idToken: String, @Path("note_id") noteId: String, @Body updateNoteRequest: UpdateNoteRequest): NoteResponse
 }
