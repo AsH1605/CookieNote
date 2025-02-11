@@ -76,4 +76,6 @@ dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.squareup.okHttp)
     implementation(libs.squareup.okHttp.interceptor)
+    implementation(libs.play.services.location)
+    implementation(libs.kotlinx.coroutines.play.services)
 }
