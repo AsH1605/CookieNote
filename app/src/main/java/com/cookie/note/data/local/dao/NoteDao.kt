@@ -16,8 +16,8 @@ interface NoteDao {
     @Update
     suspend fun updateNote(noteRecord: NoteRecord)
 
-    @Query("DELETE FROM noterecord WHERE userId = :userId AND localId = :noteId")
-    suspend fun deleteNote(userId: Int, noteId: Int)
+    @Query("DELETE FROM noterecord WHERE localId = :noteId")
+    suspend fun deleteNote(noteId: Int)
 
     @Query("SELECT * FROM noteRecord")
     fun getAllNotes(): Flow<List<NoteRecord>>
@@ -25,14 +25,13 @@ interface NoteDao {
     @Insert
     suspend fun insertNotes(notes: List<NoteRecord>)
 
-    @Query("SELECT * FROM noterecord WHERE userId = :userId AND localId = :noteId")
-    suspend fun getNoteById(userId: Int, noteId: Int): NoteRecord
+    @Query("SELECT * FROM noterecord WHERE localId = :noteId")
+    suspend fun getNoteById(noteId: Int): NoteRecord
 
-    @Query("UPDATE noterecord SET title = :title, content = :content, lastUpdatedAt = :lastUpdatedAt WHERE userId = :userId AND localId = :noteId")
+    @Query("UPDATE noterecord SET title = :title, content = :content, lastUpdatedAt = :lastUpdatedAt WHERE localId = :noteId")
     suspend fun updateNoteById(
         title: String,
         content: String,
-        userId: Int,
         noteId: Int,
         lastUpdatedAt: Long
     )

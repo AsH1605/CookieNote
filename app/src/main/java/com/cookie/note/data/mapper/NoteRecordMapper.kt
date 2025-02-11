@@ -25,6 +25,9 @@ fun NoteResponse.toNoteRecord(): NoteRecord{
         title = title,
         content = content,
         createdAt = isoTimestampToDate(createdAt).time,
-        lastUpdatedAt = isoTimestampToDate(lastUpdatedAt).time
+        lastUpdatedAt = isoTimestampToDate(lastUpdatedAt).time,
+        latitude = latitude,
+        longitude = longitude,
+        address = address
     )
 }

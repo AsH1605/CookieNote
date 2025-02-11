@@ -37,9 +37,11 @@ class NoteEditorVM @Inject constructor(
     }
 
     private suspend fun initUiState() {
-        noteId?.let { id -> //TODO: Pass user_id from preferences once auth has been implemented
-            val note = noteRepository.getNote(1, id)
-            _uiState.update { it.copy(title = note.title, content = note.content) }
+        noteId?.let { id ->
+            val note = noteRepository.getNote(id)
+            if (note != null) {
+                _uiState.update { it.copy(title = note.title, content = note.content) }
+            }
         }
     }
 
@@ -80,11 +82,9 @@ class NoteEditorVM @Inject constructor(
         noteId?.let { id ->
             val title = uiState.value.title
             val content = uiState.value.content
-            val userId = 1 //TODO: Read user_id from preferences once auth has been implemented
             noteRepository.updateNote(
                 title = title,
                 content = content,
-                userId = userId,
                 noteId = id
             )
         }

@@ -1,6 +1,7 @@
 package com.cookie.note.data.local
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -9,7 +10,11 @@ import com.cookie.note.data.local.dao.UserDao
 import com.cookie.note.data.local.entities.NoteRecord
 import com.cookie.note.data.local.entities.UserRecord
 
-@Database(entities = [NoteRecord::class, UserRecord::class], version = 1)
+@Database(
+    entities = [NoteRecord::class, UserRecord::class],
+    version = 2,
+    autoMigrations = [AutoMigration(1, 2)]
+)
 abstract class CookieDatabase : RoomDatabase() {
     abstract fun noteDao(): NoteDao
 

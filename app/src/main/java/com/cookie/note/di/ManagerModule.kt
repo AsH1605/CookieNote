@@ -1,7 +1,9 @@
 package com.cookie.note.di
 
 import android.content.Context
+import com.cookie.note.data.manager.LocationManagerImpl
 import com.cookie.note.data.manager.PreferencesManagerImpl
+import com.cookie.note.domain.managers.NoteLocationManager
 import com.cookie.note.domain.managers.PreferencesManager
 import dagger.Module
 import dagger.Provides
@@ -20,5 +22,11 @@ object ManagerModule {
         return PreferencesManagerImpl(
             context = context
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocationManager(): NoteLocationManager {
+        return LocationManagerImpl()
     }
 }

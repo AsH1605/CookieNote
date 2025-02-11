@@ -12,5 +12,8 @@ data class NoteResponse(
     val content: String,
     @SerialName("user_id") val userId: Int,
     @SerialName("created_at") val createdAt: String,
-    @SerialName("last_updated_at") val lastUpdatedAt: String
+    @SerialName("last_updated_at") val lastUpdatedAt: String,
+    val latitude: Double?,
+    val longitude: Double?,
+    val address: String?
 )

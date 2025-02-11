@@ -6,6 +6,7 @@ import com.cookie.note.data.remote.NoteApi
 import com.cookie.note.data.remote.UserApi
 import com.cookie.note.data.repository.NoteRepositoryImpl
 import com.cookie.note.data.repository.OnBoardingRepositoryImpl
+import com.cookie.note.domain.managers.NoteLocationManager
 import com.cookie.note.domain.managers.PreferencesManager
 import com.cookie.note.domain.repositories.NoteRepository
 import com.cookie.note.domain.repositories.OnBoardingRepository
@@ -25,13 +26,15 @@ object RepositoryModule {
         dao: NoteDao,
         api: NoteApi,
         userDao: UserDao,
-        preferencesManager: PreferencesManager
+        preferencesManager: PreferencesManager,
+        locationManager: NoteLocationManager
     ): NoteRepository {
         return NoteRepositoryImpl(
             noteDao = dao,
             userDao = userDao,
             noteApi = api,
-            preferencesManager = preferencesManager
+            preferencesManager = preferencesManager,
+            locationManager = locationManager
         )
     }
 

@@ -15,31 +15,35 @@ import javax.inject.Inject
 @HiltViewModel
 class ListNoteVM @Inject constructor(
     private val noteRepository: NoteRepository
-) : ViewModel(){
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<UiState?>(null)
     val uiState: StateFlow<UiState?> = _uiState
+
     init {
         viewModelScope.launch {
             initUiState()
         }
     }
 
-    private suspend fun initUiState(){
-        noteRepository.getAllNotes(1).collect{notes ->
-            _uiState.update { UiState(
-                username = "appleeee",
-                allNotes = notes
-            ) }
+    private suspend fun initUiState() {
+        noteRepository.getAllNotes().collect { notes ->
+            _uiState.update {
+                UiState(
+                    username = "appleeee",
+                    allNotes = notes
+                )
+            }
         }
     }
 
-    fun onUiEvent(event: UiEvent){
-        when(event){
+    fun onUiEvent(event: UiEvent) {
+        when (event) {
             UiEvent.OnCreateNoteClicked -> {}
-            is UiEvent.OnDeleteNote -> viewModelScope.launch{
-                    noteRepository.deleteNote(noteId = event.noteId, userId = 1)
+            is UiEvent.OnDeleteNote -> viewModelScope.launch {
+                noteRepository.deleteNote(noteId = event.noteId)
             }
+
             is UiEvent.OnNoteClicked -> {}
         }
     }

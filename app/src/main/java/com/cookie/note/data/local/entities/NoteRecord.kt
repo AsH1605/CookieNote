@@ -10,7 +10,10 @@ data class NoteRecord(
     val title: String,
     val content: String,
     val createdAt: Long,
-    val lastUpdatedAt: Long
+    val lastUpdatedAt: Long,
+    val latitude: Double?,
+    val longitude: Double?,
+    val address: String?
 ){
     // we are not passing this variable to constructor because sqlite will autogenerate the local id
     // and if we keep this variable in constructor we will be needing two manually generate unique id for the records being saved in the database
