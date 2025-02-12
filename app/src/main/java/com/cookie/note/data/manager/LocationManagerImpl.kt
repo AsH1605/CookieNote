@@ -6,6 +6,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
+import android.util.Log
 import com.cookie.note.domain.managers.NoteLocationManager
 import com.cookie.note.domain.models.NoteLocation
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -24,7 +25,6 @@ import java.io.IOException
 import java.util.Locale
 import kotlin.coroutines.resume
 
-//TODO: Use actual location service from Google Playstore
 class LocationManagerImpl(
     private val context: Context,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
@@ -33,16 +33,21 @@ class LocationManagerImpl(
     private val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
     override suspend fun getLocation(): NoteLocation? {
-        return NoteLocation(21.128686, 81.765711, "IIIT Naya Raipur")
+        try {
+            return userAddressFromLocationService()
+        }catch (e: Exception){
+            Log.e(TAG, e.message.toString(), e)
+            return null
+        }
     }
 
     @SuppressLint("MissingPermission")
-    private suspend fun userAddressFromLocationService(): Address? {
+    private suspend fun userAddressFromLocationService(): NoteLocation? {
         val cancellationTokenSource = CancellationTokenSource()
         return try {
             withTimeout(TIMEOUT_MS) {
                 val location: Location? = fusedLocationClient.getCurrentLocation(
-                    Priority.PRIORITY_HIGH_ACCURACY,
+                    Priority.PRIORITY_LOW_POWER,
                     object : CancellationToken() {
                         override fun onCanceledRequested(p0: OnTokenCanceledListener): CancellationToken {
                             return cancellationTokenSource.token
@@ -64,7 +69,13 @@ class LocationManagerImpl(
                             location.longitude,
                             1
                         ) { addresses ->
-                            continuation.resume(addresses.firstOrNull())
+                            val address = addresses.firstOrNull()
+                            val noteLocation = NoteLocation(
+                                location.latitude,
+                                location.longitude,
+                                address?.locality
+                            )
+                            continuation.resume(noteLocation)
                         }
                     } else {
                         val addresses = geocoder.getFromLocation(
@@ -72,7 +83,13 @@ class LocationManagerImpl(
                             location.longitude,
                             1
                         )
-                        continuation.resume(addresses?.firstOrNull())
+                        val address = addresses?.firstOrNull()
+                        val noteLocation = NoteLocation(
+                            location.latitude,
+                            location.longitude,
+                            address?.locality
+                        )
+                        continuation.resume(noteLocation)
                     }
                 }
             }
@@ -85,6 +102,7 @@ class LocationManagerImpl(
     }
 
     companion object {
-        const val TIMEOUT_MS = 60_000L
+        const val TIMEOUT_MS = 6_000L
+        const val TAG = "LocationManagerImpl"
     }
 }

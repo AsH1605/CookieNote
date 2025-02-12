@@ -15,4 +15,7 @@ interface UserDao {
 
     @Query("SELECT idToken FROM userrecord WHERE id = :userId")
     suspend fun getIdTokenForUser(userId: Int): String
+
+    @Query("SELECT username FROM userrecord WHERE id = :userId")
+    suspend fun getUsername(userId: Int): String
 }

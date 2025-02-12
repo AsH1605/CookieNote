@@ -26,7 +26,7 @@ object ManagerModule {
 
     @Provides
     @Singleton
-    fun provideLocationManager(): NoteLocationManager {
-        return LocationManagerImpl()
+    fun provideLocationManager(@ApplicationContext context: Context): NoteLocationManager {
+        return LocationManagerImpl(context)
     }
 }

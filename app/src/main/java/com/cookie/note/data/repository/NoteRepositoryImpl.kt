@@ -31,6 +31,11 @@ class NoteRepositoryImpl(
     private val locationManager: NoteLocationManager,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : NoteRepository {
+
+    companion object{
+        const val TAG = "NoteRepositoryImpl"
+    }
+
     override suspend fun createNote(title: String, content: String): Result<Int, DomainError> =
         withContext(ioDispatcher) {
             val userId = preferencesManager.getLoggedInWorkerId()
@@ -53,6 +58,7 @@ class NoteRepositoryImpl(
                 Result.Success(localId)
 
             } catch (e: HttpException) {
+                Log.e(TAG, e.message().toString(), e)
                 Result.Failure(e.toDomainError())
             }
         }
@@ -84,15 +90,17 @@ class NoteRepositoryImpl(
         }
     }
 
-    override suspend fun deleteNote(noteId: Int): Boolean {
-        return withContext(ioDispatcher) {
-            try {
-                noteDao.deleteNote(noteId)
-                true
-            } catch (e: IOException) {
-                Log.e("NoteRepositoryImpl", e.toString())
-                false
-            }
+    override suspend fun deleteNote(noteId: Int): Result<Unit, DomainError> = withContext(ioDispatcher) {
+        val userId = preferencesManager.getLoggedInWorkerId()
+            ?: return@withContext Result.Failure(DomainError.NoLoggedInWorker)
+        try {
+            val idToken = userDao.getIdTokenForUser(userId)
+            noteApi.deleteNote(idToken, noteId)
+            noteDao.deleteNote(noteId)
+            Result.Success(Unit)
+        } catch (e: HttpException) {
+            Log.e("NoteRepositoryImpl", e.toString())
+            Result.Failure(e.toDomainError())
         }
     }
 
@@ -108,6 +116,15 @@ class NoteRepositoryImpl(
             noteRecords.map { record ->
                 record.toNote()
             }
+        }
+    }
+
+    override suspend fun getUsername(): String? = withContext(ioDispatcher){
+        val userId = preferencesManager.getLoggedInWorkerId()
+        if(userId != null){
+            userDao.getUsername(userId)
+        }else{
+            null
         }
     }
 }

@@ -24,7 +24,7 @@ interface NoteApi {
     suspend fun getNote(@Header("id_token") idToken: String, @Path("note_id") noteId: Int): NoteResponse
 
     @DELETE("notes/deleteNote/{note_id}")
-    suspend fun deleteNote(@Header("id_token") idToken: String, @Path("note_id") noteId: Int): Boolean
+    suspend fun deleteNote(@Header("id_token") idToken: String, @Path("note_id") noteId: Int)
 
     @PUT("notes/updateNote/{note_id}")
     suspend fun updateNote(@Header("id_token") idToken: String, @Path("note_id") noteId: Int, @Body updateNoteRequest: UpdateNoteRequest): NoteResponse

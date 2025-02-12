@@ -11,9 +11,11 @@ interface NoteRepository {
 
     suspend fun updateNote(title: String, content: String, noteId: Int): Result<Note, DomainError>
 
-    suspend fun deleteNote(noteId: Int): Boolean
+    suspend fun deleteNote(noteId: Int): Result<Unit, DomainError>
 
     suspend fun getNote(noteId: Int): Note?
 
     fun getAllNotes(): Flow<List<Note>>
+
+    suspend fun getUsername(): String?
 }

@@ -27,10 +27,11 @@ class ListNoteVM @Inject constructor(
     }
 
     private suspend fun initUiState() {
+        val username = noteRepository.getUsername()
         noteRepository.getAllNotes().collect { notes ->
             _uiState.update {
                 UiState(
-                    username = "appleeee",
+                    username = username,
                     allNotes = notes
                 )
             }
