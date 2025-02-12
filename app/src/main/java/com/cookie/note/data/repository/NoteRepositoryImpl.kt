@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import java.io.IOException
 import com.cookie.note.domain.result.Result
 
 class NoteRepositoryImpl(
@@ -38,7 +37,7 @@ class NoteRepositoryImpl(
 
     override suspend fun createNote(title: String, content: String): Result<Int, DomainError> =
         withContext(ioDispatcher) {
-            val userId = preferencesManager.getLoggedInWorkerId()
+            val userId = preferencesManager.getLoggedInUserId()
                 ?: return@withContext Result.Failure(DomainError.NoLoggedInWorker)
             try {
                 val idToken = userDao.getIdTokenForUser(userId)
@@ -68,7 +67,7 @@ class NoteRepositoryImpl(
         content: String,
         noteId: Int
     ): Result<Note, DomainError> = withContext(ioDispatcher) {
-        val userId = preferencesManager.getLoggedInWorkerId()
+        val userId = preferencesManager.getLoggedInUserId()
             ?: return@withContext Result.Failure(DomainError.NoLoggedInWorker)
         try {
             val idToken = userDao.getIdTokenForUser(userId)
@@ -91,7 +90,7 @@ class NoteRepositoryImpl(
     }
 
     override suspend fun deleteNote(noteId: Int): Result<Unit, DomainError> = withContext(ioDispatcher) {
-        val userId = preferencesManager.getLoggedInWorkerId()
+        val userId = preferencesManager.getLoggedInUserId()
             ?: return@withContext Result.Failure(DomainError.NoLoggedInWorker)
         try {
             val idToken = userDao.getIdTokenForUser(userId)
@@ -105,7 +104,7 @@ class NoteRepositoryImpl(
     }
 
     override suspend fun getNote(noteId: Int): Note? {
-        val userId = preferencesManager.getLoggedInWorkerId() ?: return null
+        val userId = preferencesManager.getLoggedInUserId() ?: return null
         return withContext(ioDispatcher) {
             noteDao.getNoteById(noteId).toNote()
         }
@@ -120,7 +119,7 @@ class NoteRepositoryImpl(
     }
 
     override suspend fun getUsername(): String? = withContext(ioDispatcher){
-        val userId = preferencesManager.getLoggedInWorkerId()
+        val userId = preferencesManager.getLoggedInUserId()
         if(userId != null){
             userDao.getUsername(userId)
         }else{

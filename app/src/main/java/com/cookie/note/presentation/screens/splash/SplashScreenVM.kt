@@ -7,7 +7,9 @@ import com.cookie.note.presentation.screens.splash.model.VMEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,8 +18,8 @@ class SplashScreenVM @Inject constructor(
     private val onBoardingRepository: OnBoardingRepository
 ): ViewModel() {
 
-    private val _vmEvent = MutableSharedFlow<VMEvent>()
-    val vmEvent = _vmEvent.asSharedFlow()
+    private val _vmEvent = MutableStateFlow<VMEvent?>(null)
+    val vmEvent = _vmEvent.asStateFlow()
 
     init {
         viewModelScope.launch { checkLoginStatus() }
@@ -25,7 +27,6 @@ class SplashScreenVM @Inject constructor(
 
     private suspend fun checkLoginStatus(){
         val userId = onBoardingRepository.getLoggedInUserId()
-        delay(5000L)
         if(userId == null){
             _vmEvent.emit(VMEvent.NavigateToLogInScreen)
         }

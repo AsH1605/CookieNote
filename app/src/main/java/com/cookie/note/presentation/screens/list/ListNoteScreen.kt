@@ -18,6 +18,8 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -34,6 +36,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -48,12 +51,21 @@ import androidx.compose.ui.unit.sp
 import com.cookie.note.domain.models.Note
 import com.cookie.note.presentation.screens.list.model.UiEvent
 import com.cookie.note.presentation.screens.list.model.UiState
+import com.cookie.note.presentation.screens.list.model.VMEvent
 import com.cookie.note.presentation.theme.CookieNoteTheme
 import java.util.Date
 
 @Composable
-fun AllNotesScreen(viewModel: ListNoteVM, navigateToNoteEditor: (Int) -> Unit) {
+fun AllNotesScreen(viewModel: ListNoteVM, navigateToNoteEditor: (Int) -> Unit, navigateToLoginScreen: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.vmEvent.collect(collector = {event->
+            when(event){
+                VMEvent.NavigateToLogInScreen -> navigateToLoginScreen()
+            }
+        }
+        )
+    }
     uiState?.let { state -> //let because uiState is nullable here
         AllNotesScreen(uiState = state, onUiEvent = { event ->
             when (event) {
@@ -87,10 +99,19 @@ private fun AllNotesScreen(
                     )
                 },
                 actions = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {onUiEvent(UiEvent.OnProfileClicked)}) {
                         Icon(
                             imageVector = Icons.Filled.AccountCircle,
                             contentDescription = "Profile"
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = uiState.isContextMenuVisible,
+                        onDismissRequest = { onUiEvent(UiEvent.OnProfileClicked) } //FIXME
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text("Logout" ) },
+                            onClick = { onUiEvent(UiEvent.OnLogoutClicked) }
                         )
                     }
                 },

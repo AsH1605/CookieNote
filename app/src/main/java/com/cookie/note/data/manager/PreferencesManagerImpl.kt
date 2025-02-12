@@ -11,16 +11,22 @@ class PreferencesManagerImpl(context: Context): PreferencesManager {
 
     private val preferences = context.settingsDataStore
 
-    override suspend fun getLoggedInWorkerId(): Int? {
+    override suspend fun getLoggedInUserId(): Int? {
         return preferences.data.map { prefs->
             prefs[PreferencesKeys.loggedInUserKey]
         }
             .first()
     }
 
-    override suspend fun setLoggedInWorker(id: Int) {
+    override suspend fun setLoggedInWorker(id: Int?) {
         preferences.edit { prefs->
-            prefs[PreferencesKeys.loggedInUserKey] = id
+            if(id == null){
+                prefs.remove(PreferencesKeys.loggedInUserKey)
+            }
+            else{
+                prefs[PreferencesKeys.loggedInUserKey] = id
+            }
+
         }
     }
 }

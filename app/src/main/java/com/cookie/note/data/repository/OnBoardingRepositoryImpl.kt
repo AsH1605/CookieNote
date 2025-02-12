@@ -17,7 +17,6 @@ import com.cookie.note.domain.util.isoTimestampToDate
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 
 class OnBoardingRepositoryImpl(
@@ -76,8 +75,12 @@ class OnBoardingRepositoryImpl(
         return withContext(
             context = ioDispatcher,
             block = {
-                preferencesManager.getLoggedInWorkerId()
+                preferencesManager.getLoggedInUserId()
             }
         )
+    }
+
+    override suspend fun logoutUser() = withContext(ioDispatcher){
+        preferencesManager.setLoggedInWorker(null)
     }
 }

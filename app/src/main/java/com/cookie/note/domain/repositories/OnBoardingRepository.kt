@@ -11,4 +11,6 @@ interface OnBoardingRepository {
     suspend fun loginUser(username: String, password: String): Result<User, DomainError>
 
     suspend fun getLoggedInUserId(): Int?
+
+    suspend fun logoutUser()
 }

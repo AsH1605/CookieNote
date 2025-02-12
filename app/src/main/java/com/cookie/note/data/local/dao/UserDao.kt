@@ -2,12 +2,13 @@ package com.cookie.note.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.cookie.note.data.local.entities.UserRecord
 
 @Dao
 interface UserDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addUser(userRecord: UserRecord)
 
     @Query("SELECT * FROM userrecord WHERE id = :userId")

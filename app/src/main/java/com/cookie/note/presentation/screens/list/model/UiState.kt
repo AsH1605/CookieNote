@@ -4,5 +4,6 @@ import com.cookie.note.domain.models.Note
 
 data class UiState (
     val username: String?,
-    val allNotes: List<Note>
+    val allNotes: List<Note>,
+    var isContextMenuVisible: Boolean = false
 )

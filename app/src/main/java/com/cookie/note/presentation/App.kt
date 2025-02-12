@@ -31,10 +31,18 @@ fun App() {
             SplashScreen(
                 viewModel = viewModel,
                 navigateToListNoteScreen = {
-                    navController.navigate("note_list_screen")
+                    navController.navigate("note_list_screen"){
+                        popUpTo("splash_screen"){
+                            inclusive = true
+                        }
+                    }
                 },
                 navigateToLogInScreen = {
-                    navController.navigate("login_screen")
+                    navController.navigate("login_screen"){
+                        popUpTo("splash_screen"){
+                            inclusive = true
+                        }
+                    }
                 },
             )
         }
@@ -62,9 +70,14 @@ fun App() {
 
         composable(route = "note_list_screen"){
             val viewModel = hiltViewModel<ListNoteVM>()
-            AllNotesScreen(viewModel = viewModel, navigateToNoteEditor = {noteId->
-                navController.navigate("edit_note_screen?note_id=${noteId}")
-            })
+            AllNotesScreen(
+                viewModel = viewModel, navigateToNoteEditor = { noteId ->
+                    navController.navigate("edit_note_screen?note_id=${noteId}")
+                },
+                navigateToLoginScreen = {
+                    navController.navigate("login_screen")
+                }
+            )
         }
 
         composable(route = "edit_note_screen?note_id={noteId}", arguments = listOf(navArgument(

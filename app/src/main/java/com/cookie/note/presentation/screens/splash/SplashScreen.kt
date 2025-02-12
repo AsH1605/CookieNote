@@ -28,9 +28,11 @@ fun SplashScreen(
             when(event){
                 VMEvent.NavigateToListNoteScreen -> navigateToListNoteScreen()
                 VMEvent.NavigateToLogInScreen -> navigateToLogInScreen()
+                null -> {}
             }
         })
     }
+    SplashScreen()
 }
 
 @Composable
