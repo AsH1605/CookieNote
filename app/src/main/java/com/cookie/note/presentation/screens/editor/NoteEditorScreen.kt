@@ -56,6 +56,7 @@ private fun NoteEditorScreen(
 
     Scaffold (
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        containerColor = MaterialTheme.colorScheme.onPrimary,
         topBar = {
             LargeTopAppBar(
                 title = {
@@ -91,7 +92,10 @@ private fun NoteEditorScreen(
                         )
                     }
                 },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.onPrimary
+                )
             )
         }
     ){padding->
