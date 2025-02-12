@@ -47,7 +47,7 @@ class LocationManagerImpl(
         return try {
             withTimeout(TIMEOUT_MS) {
                 val location: Location? = fusedLocationClient.getCurrentLocation(
-                    Priority.PRIORITY_LOW_POWER,
+                    Priority.PRIORITY_HIGH_ACCURACY,
                     object : CancellationToken() {
                         override fun onCanceledRequested(p0: OnTokenCanceledListener): CancellationToken {
                             return cancellationTokenSource.token
