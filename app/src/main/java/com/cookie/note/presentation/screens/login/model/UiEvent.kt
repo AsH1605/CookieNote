@@ -5,4 +5,5 @@ sealed interface UiEvent {
     data class OnUsernameUpdate(val updatedUsername: String): UiEvent
     data class OnPasswordUpdate(val updatedPassword: String): UiEvent
     data object OnDismissError: UiEvent
+    data object OnRegisterClicked: UiEvent
 }

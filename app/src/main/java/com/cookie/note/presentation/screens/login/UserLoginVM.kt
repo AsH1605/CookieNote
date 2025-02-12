@@ -45,6 +45,12 @@ class UserLoginVM @Inject constructor(
             UiEvent.OnDismissError -> {
                 _uiState.update { it.copy(error = null) }
             }
+
+            UiEvent.OnRegisterClicked -> {
+                viewModelScope.launch {
+                    _vmEvent.emit(VMEvent.NavigateToRegisterUser)
+                }
+            }
         }
     }
 

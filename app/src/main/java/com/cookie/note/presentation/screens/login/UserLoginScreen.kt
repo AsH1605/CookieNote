@@ -116,6 +116,18 @@ private fun UserLoginScreen(
                     "Log In"
                 )
             }
+            Spacer(Modifier.height(16.dp))
+            Button(
+                onClick = {
+                    onUiEvent(UiEvent.OnRegisterClicked)
+                },
+                modifier = Modifier.fillMaxWidth(0.8f),
+                shape = RoundedCornerShape(4.dp)
+            ) {
+                Text(
+                    "New User? Register Now!"
+                )
+            }
         }
     }
 
