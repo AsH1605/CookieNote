@@ -1,6 +1,7 @@
 package com.cookie.note.domain.repositories
 
 import com.cookie.note.domain.models.Note
+import com.cookie.note.domain.models.NoteLocation
 import com.cookie.note.domain.result.DomainError
 import com.cookie.note.domain.result.Result
 import kotlinx.coroutines.flow.Flow
@@ -18,4 +19,6 @@ interface NoteRepository {
     fun getAllNotes(): Flow<List<Note>>
 
     suspend fun getUsername(): String?
+
+    suspend fun getNoteLocationById(noteId: Int): NoteLocation?
 }

@@ -24,6 +24,7 @@ import com.cookie.note.presentation.screens.list.AllNotesScreen
 import com.cookie.note.presentation.screens.list.ListNoteVM
 import com.cookie.note.presentation.screens.list.model.UiState
 import com.cookie.note.presentation.screens.login.UserLoginScreen
+import com.cookie.note.presentation.screens.map.MapScreen
 import com.cookie.note.presentation.theme.CookieNoteTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers

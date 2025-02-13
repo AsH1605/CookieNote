@@ -19,6 +19,7 @@ androidxDatastoreVersion = "1.1.1"
 okHttpVersion = "4.12.0"
 location = "21.3.0"
 kotlinx-coroutines = "1.9.0"
+playServicesMaps = "19.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -50,6 +51,7 @@ squareup-okHttp = {group = "com.squareup.okhttp3", name = "okhttp", version.ref 
 squareup-okHttp-interceptor = {group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okHttpVersion"}
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "location" }
 kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

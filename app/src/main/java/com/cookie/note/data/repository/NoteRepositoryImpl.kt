@@ -12,6 +12,7 @@ import com.cookie.note.data.remote.dto.note.UpdateNoteRequest
 import com.cookie.note.domain.managers.NoteLocationManager
 import com.cookie.note.domain.managers.PreferencesManager
 import com.cookie.note.domain.models.Note
+import com.cookie.note.domain.models.NoteLocation
 import com.cookie.note.domain.repositories.NoteRepository
 import com.cookie.note.domain.result.DomainError
 import kotlinx.coroutines.CoroutineDispatcher
@@ -104,7 +105,6 @@ class NoteRepositoryImpl(
     }
 
     override suspend fun getNote(noteId: Int): Note? {
-        val userId = preferencesManager.getLoggedInUserId() ?: return null
         return withContext(ioDispatcher) {
             noteDao.getNoteById(noteId).toNote()
         }
@@ -124,6 +124,17 @@ class NoteRepositoryImpl(
             userDao.getUsername(userId)
         }else{
             null
+        }
+    }
+
+    override suspend fun getNoteLocationById(noteId: Int): NoteLocation? {
+        val note = noteDao.getNoteById(noteId)
+        return withContext(ioDispatcher){
+            NoteLocation(
+                latitude = note.latitude,
+                longitude = note.longitude,
+                address = note.address
+            )
         }
     }
 }

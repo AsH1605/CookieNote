@@ -3,6 +3,7 @@ package com.cookie.note.presentation.screens.list
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.DropdownMenu
@@ -41,6 +43,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -57,7 +60,7 @@ import com.cookie.note.presentation.theme.CookieNoteTheme
 import java.util.Date
 
 @Composable
-fun AllNotesScreen(viewModel: ListNoteVM, navigateToNoteEditor: (Int) -> Unit, navigateToLoginScreen: () -> Unit) {
+fun AllNotesScreen(viewModel: ListNoteVM, navigateToNoteEditor: (Int) -> Unit, navigateToLoginScreen: () -> Unit, navigateToMapScreen: (Int) ->Unit) {
     val uiState by viewModel.uiState.collectAsState()
     LaunchedEffect(Unit) {
         viewModel.vmEvent.collect(collector = {event->
@@ -72,6 +75,7 @@ fun AllNotesScreen(viewModel: ListNoteVM, navigateToNoteEditor: (Int) -> Unit, n
             when (event) {
                 UiEvent.OnCreateNoteClicked -> navigateToNoteEditor(-1)
                 is UiEvent.OnNoteClicked -> navigateToNoteEditor(event.noteId)
+                is UiEvent.OnLocationClicked -> navigateToMapScreen(event.noteId)
                 else -> {
                     viewModel.onUiEvent(event)
                 }
@@ -153,9 +157,12 @@ private fun AllNotesScreen(
                     swipeDismissedState,
                     backgroundContent = {}
                 ) {
-                    NoteCard(note.title, note.content, onClick = {
-                        onUiEvent(UiEvent.OnNoteClicked(note.localId))
-                    })
+                    NoteCard(
+                        note.title, note.content, onClick = {
+                            onUiEvent(UiEvent.OnNoteClicked(note.localId))
+                        },
+                        locationClicked = { onUiEvent(UiEvent.OnLocationClicked(note.localId)) }
+                    )
                 }
             }
         }
@@ -163,7 +170,7 @@ private fun AllNotesScreen(
 }
 
 @Composable
-fun NoteCard(noteTitle: String, noteContent: String, onClick: () -> Unit) {
+fun NoteCard(noteTitle: String, noteContent: String, onClick: () -> Unit, locationClicked: () -> Unit) {
     Card(
         modifier = Modifier
             .wrapContentHeight()
@@ -179,13 +186,30 @@ fun NoteCard(noteTitle: String, noteContent: String, onClick: () -> Unit) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
-            Text(
-                text = noteTitle,
-                modifier = Modifier,
-                textAlign = TextAlign.Left,
-                fontSize = 20.sp,
-                maxLines = 1
-            )
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(
+                    text = noteTitle,
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Left,
+                    fontSize = 20.sp,
+                    maxLines = 1,
+                )
+                IconButton(
+                    modifier = Modifier.padding(1.dp),
+                    onClick = {
+                        locationClicked()
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Place,
+                        contentDescription = "Location"
+                    )
+                }
+            }
+
             Spacer(Modifier.height(8.dp))
             Text(
                 text = noteContent,

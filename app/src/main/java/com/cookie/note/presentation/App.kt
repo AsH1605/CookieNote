@@ -15,6 +15,8 @@ import com.cookie.note.presentation.screens.list.AllNotesScreen
 import com.cookie.note.presentation.screens.list.ListNoteVM
 import com.cookie.note.presentation.screens.login.UserLoginScreen
 import com.cookie.note.presentation.screens.login.UserLoginVM
+import com.cookie.note.presentation.screens.map.MapScreen
+import com.cookie.note.presentation.screens.map.MapVM
 import com.cookie.note.presentation.screens.register.UserRegisterScreen
 import com.cookie.note.presentation.screens.register.UserRegisterVM
 import com.cookie.note.presentation.screens.splash.SplashScreen
@@ -76,8 +78,22 @@ fun App() {
                 },
                 navigateToLoginScreen = {
                     navController.navigate("login_screen")
+                },
+                navigateToMapScreen = {noteId->
+                    navController.navigate("map_screen?note_id=${noteId}")
                 }
             )
+        }
+
+        composable(route = "map_screen?note_id={noteId}", arguments = listOf(navArgument(
+            name = "noteId",
+            builder = {
+                type = NavType.IntType
+                nullable = false
+            },
+        ))){
+            val viewModel = hiltViewModel<MapVM>()
+            MapScreen(viewModel)
         }
 
         composable(route = "edit_note_screen?note_id={noteId}", arguments = listOf(navArgument(

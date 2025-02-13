@@ -8,4 +8,5 @@ sealed interface UiEvent {
     data class OnDeleteNote(val noteId: Int): UiEvent
     data object OnProfileClicked: UiEvent
     data object OnLogoutClicked: UiEvent
+    data class OnLocationClicked(val noteId: Int): UiEvent
 }

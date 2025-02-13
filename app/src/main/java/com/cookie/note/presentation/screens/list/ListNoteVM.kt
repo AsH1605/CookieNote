@@ -67,6 +67,8 @@ class ListNoteVM @Inject constructor(
                 onBoardingRepository.logoutUser()
                 _vmEvent.emit(VMEvent.NavigateToLogInScreen)
             }
+
+            is UiEvent.OnLocationClicked ->{}
         }
     }
 }
