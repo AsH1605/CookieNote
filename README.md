@@ -5,11 +5,11 @@ CookieNote is a modern note-taking Android app built with Kotlin using Jetpack C
 The app is backed by a custom backend server and supports both offline and online functionality through Room for local storage and Retrofit for network communication.
 
 ## 📱 Features
-✅ Create, Edit, and Delete Notes
-✅ Sync notes with a custom backend server
-✅ Offline access to notes
-✅ Modern Jetpack Compose UI
-✅ Separation of concerns using clean architecture (data-domain-presentation)
+- ✅ Create, Edit, and Delete Notes
+- ✅ Sync notes with a custom backend server
+- ✅ Offline access to notes
+- ✅ Modern Jetpack Compose UI
+- ✅ Separation of concerns using clean architecture (data-domain-presentation)
 
 ## ⚙️ Architecture
 CookieNote follows a **Clean Architecture** approach with 3 distinct layers:
