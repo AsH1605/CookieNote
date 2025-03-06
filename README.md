@@ -71,5 +71,7 @@ Open the project in Android Studio and sync the Gradle files. You should be able
 ## Contributing
 Contributions are welcome! Feel free to open issues or submit pull requests.
 
+<img src="https://github.com/user-attachments/assets/287946a3-cb80-4cf1-8aa5-be18df316aa9" width="300px"/>
+
 ---
 *Happy Coding 🍪*
