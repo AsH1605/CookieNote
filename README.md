@@ -3,6 +3,8 @@
 
 CookieNote is a modern note-taking Android app built with Kotlin using Jetpack Compose for UI and a robust MVI (Model-View-Intent) architecture. 
 The app is backed by a custom backend server and supports both offline and online functionality through Room for local storage and Retrofit for network communication.
+See Backend here: https://github.com/AsH1605/NotesAppBackend
+
 
 ## 📱 Features
 - ✅ Create, Edit, and Delete Notes
@@ -60,14 +62,6 @@ The app uses Dagger Hilt for dependency injection, ensuring:
 - In offline mode, users can still manage their notes, and changes are synced when back online.
 
 <img src="https://github.com/user-attachments/assets/287946a3-cb80-4cf1-8aa5-be18df316aa9" width="300px"/>
-
-
-# 🍪 CookieNote - Backend
-
-Backend code can be viewed here:
-
-https://github.com/AsH1605/NotesAppBackend
-
 
 ---
 *Happy Coding 🍪*
