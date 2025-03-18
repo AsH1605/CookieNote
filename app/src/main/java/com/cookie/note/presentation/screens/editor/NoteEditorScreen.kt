@@ -30,11 +30,20 @@ import androidx.compose.ui.unit.dp
 import com.cookie.note.presentation.screens.editor.components.TransparentTextField
 import com.cookie.note.presentation.screens.editor.model.UiEvent
 import com.cookie.note.presentation.screens.editor.model.UiState
+import com.cookie.note.presentation.screens.editor.model.VMEvent
 import com.cookie.note.presentation.theme.CookieNoteTheme
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun NoteEditorScreen(viewModel: NoteEditorVM, navigateUp: ()-> Unit) {
     val uiState by viewModel.uiState.collectAsState()
+    LaunchedEffect(Unit) {
+        viewModel.vmEvent.collect(collector = {event->
+            when(event){
+                VMEvent.NavigateUp -> navigateUp()
+            }
+        })
+    }
     NoteEditorScreen(uiState = uiState, onUiEvent = {event->
         if(event is UiEvent.OnNavigateUpClicked){
             navigateUp()

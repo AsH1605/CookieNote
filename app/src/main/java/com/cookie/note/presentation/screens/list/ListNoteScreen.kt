@@ -176,7 +176,7 @@ fun NoteCard(noteTitle: String, noteContent: String, onClick: () -> Unit, locati
             .wrapContentHeight()
             .fillMaxWidth(),
         colors = CardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = MaterialTheme.colorScheme.primary,
             contentColor = Color.White,
             disabledContainerColor = MaterialTheme.colorScheme.tertiary,
             disabledContentColor = MaterialTheme.colorScheme.secondary

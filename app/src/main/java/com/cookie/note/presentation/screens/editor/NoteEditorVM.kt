@@ -4,13 +4,15 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cookie.note.domain.repositories.NoteRepository
-import com.cookie.note.domain.result.DomainError
 import com.cookie.note.domain.result.onFailure
 import com.cookie.note.domain.result.onSuccess
 import com.cookie.note.presentation.screens.editor.model.UiEvent
 import com.cookie.note.presentation.screens.editor.model.UiState
+import com.cookie.note.presentation.screens.editor.model.VMEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,6 +25,9 @@ class NoteEditorVM @Inject constructor(
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<UiState>(UiState("", ""))
     val uiState = _uiState.asStateFlow()
+
+    private val _vmEvent = MutableSharedFlow<VMEvent>()
+    val vmEvent = _vmEvent.asSharedFlow()
 
     private var noteId: Int? = null
 
@@ -48,9 +53,12 @@ class NoteEditorVM @Inject constructor(
     fun onUiEvent(event: UiEvent): Unit {
         when (event) {
             is UiEvent.OnContentUpdate -> onContentUpdate(event.updatedContent)
-            UiEvent.OnNavigateUpClicked -> {}
+            UiEvent.OnNavigateUpClicked -> viewModelScope.launch{
+                _vmEvent.emit(VMEvent.NavigateUp)
+            }
             UiEvent.OnSavedNoteClicked -> viewModelScope.launch {
                 saveNote()
+                _vmEvent.emit(VMEvent.NavigateUp)
             }
 
             is UiEvent.OnTitleUpdate -> onTitleUpdate(event.updatedTitle)

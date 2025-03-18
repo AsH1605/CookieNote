@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import com.cookie.note.domain.result.Result
+import kotlinx.coroutines.runBlocking
 
 class NoteRepositoryImpl(
     private val noteDao: NoteDao,
@@ -111,7 +112,10 @@ class NoteRepositoryImpl(
     }
 
     override fun getAllNotes(): Flow<List<Note>> {
-        return noteDao.getAllNotes().map { noteRecords ->
+        val userId = runBlocking {
+            preferencesManager.getLoggedInUserId()!!
+        }
+        return noteDao.getAllNotes(userId).map { noteRecords ->
             noteRecords.map { record ->
                 record.toNote()
             }
